@@ -1,0 +1,27 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model DownHistory {
+  id String @id @default(uuid())
+  nome String 
+  key String 
+  hostId String
+  hostName String
+  date DateTime @default(now())
+
+  notifications immediatefailureNotification[]
+}
+
+model immediatefailureNotification {
+  id String @id @default(uuid())
+  downHistoryId String 
+  read Boolean @default(false)
+  
+  downHistory DownHistory @relation(fields: [downHistoryId], references: [id])
+}
