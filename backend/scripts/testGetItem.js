@@ -14,10 +14,9 @@ async function testGetItems() {
 
   // Após o login, chama o método getItems com o hostId fornecido
   const hostId = process.env.ZABBIX_ID_HOST; // O ID do host
-  const items = await zabbix.getItems(hostId);
-  items.forEach((element) => {
-    console.log(element.nome, element.itemId);
-  });
+
+  const items = await zabbix.getItems(hostId, 49807);
+  console.log(items);
 
   // Logout após o teste
   await zabbix.logout();

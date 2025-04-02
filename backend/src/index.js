@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const http = require("http");
 require("dotenv").config();
+require("./jobs/cron.js"); 
 
 const routes = require("./routes");
 const app = express();

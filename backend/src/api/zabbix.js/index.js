@@ -1,5 +1,4 @@
 const axios = require("axios");
-const { v4: uuidv4 } = require("uuid");
 const { handleZabbixError } = require("../../utils/errorHandler.js");
 
 class ZabbixAPI {
@@ -54,11 +53,14 @@ class ZabbixAPI {
     }
   }
 
-  async getItems(hostId) {
+  async getItems(hostId, itemId) {
     const data = {
       jsonrpc: "2.0",
       method: "item.get",
       params: {
+        filter: {
+          itemid: itemId
+        },
         output: ["name", "key_", "hostid"],
         hostids: hostId,
         selectHosts: ["host"], // Isso inclui o nome do host na resposta
@@ -73,7 +75,6 @@ class ZabbixAPI {
         throw new Error(`${response.data.error.data}`);
       }
       return response.data.result.map((item) => ({
-        id: uuidv4(), // Gera um ID único para cada item
         nome: item.name,
         key: item.key_,
         hostId: item.hostid,

@@ -1,4 +1,4 @@
-const { errorCheckController } = require("./index.js");
+const { checkForErrors } = require("./errorCheckService.js");
 
 // Latência do Usuário POP Ponta Negra 49798
 // Latência do Usuário POP Praia do Meio 49801
@@ -29,6 +29,6 @@ const { errorCheckController } = require("./index.js");
 // Potência TX do Usuário POP Tirol 49823
 // Potência TX do Usuário POP Zona Norte 49824
 
-errorCheckController(["49798", "49801", "49799", "49800"])
+checkForErrors(["49798", "49801", "49799", "49800"])
   .then(() => console.log("Teste concluído."))
   .catch((error) => console.error("Erro no teste:", error.message));

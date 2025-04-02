@@ -2,7 +2,6 @@ require("dotenv").config();
 const logger = require("../../custom/logger.js");
 const ZabbixAPI = require("../../api/zabbix.js/index.js");
 const { PrismaClient } = require("@prisma/client");
-const { log } = require("winston");
 
 const zabbix = new ZabbixAPI(
   process.env.ZABBIX_LINK, // Zabbix URL
@@ -35,25 +34,4 @@ const validItemIds = [
   "49824", // Potência TX
 ];
 
-module.exports = {
-  async errorCheckController(itemIds) {
-    try {
-      await zabbix.login();
-      // Faz uso de um map + Promise.all para fazer as requisições em paralelo
-      const promises = itemIds.map((itemId) => zabbix.getHistory(itemId));
-      const items = await Promise.all(promises);
-      const errorItems = items
-        .flat()
-        .filter((item) => item.value === 0 || item.value === null)
-        .map((item) => item.itemid);
-      if (errorItems.length === 0) {
-        logger.info("Nenhum erro encontrado nos itens.");
-      } else {
-        logger.error("Erros encontrados nos itens:", errorItems);
-      }
-      await zabbix.logout();
-    } catch (error) {
-      throw error;
-    }
-  },
-};
+
