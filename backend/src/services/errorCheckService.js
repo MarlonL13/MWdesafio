@@ -25,14 +25,12 @@ module.exports = {
         .flat()
         .filter((item) => item.value === 0 || item.value === null)
         .map((item) => item.itemid);
-      if (errorItems.length === 0) {
-        logger.info("Nenhum erro encontrado nos itens.");
-      } else {
+      if (errorItems.length > 0) {
+        // Salva os erros no banco de dados
         logger.warn(`Erros encontrados nos itens: ${errorItems.join(", ")}`);
+        await logErrorToDatabase(errorItems);
       }
-      // Salva os erros no banco de dados
-      await logErrorToDatabase(errorItems);
-      
+
       // Realiza Logout
       await zabbix.logout();
     } catch (error) {

@@ -3,10 +3,13 @@ const cors = require("cors");
 const http = require("http");
 require("dotenv").config();
 require("./jobs/cron.js"); 
+const { setupWebSocket } = require("./websocket/webSocket.js");
 
 const routes = require("./routes");
 const app = express();
 const server = http.createServer(app);
+
+setupWebSocket(server);
 
 
 app.use(express.json());

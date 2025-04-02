@@ -29,9 +29,6 @@ class ZabbixAPI {
       }
       return response.data;
     } catch (error) {
-      if (error.message.includes("Incorrect user name or password")) {
-        throw error;
-      }
       handleZabbixError(error);
     }
   }

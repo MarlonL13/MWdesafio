@@ -1,6 +1,7 @@
 const logger = require("../custom/logger.js");
 const ZabbixAPI = require("../api/zabbix.js/index.js");
 const { PrismaClient } = require("@prisma/client");
+const { notifyNewAlert } = require("../websocket/webSocket.js");
 
 const prisma = new PrismaClient();
 
@@ -26,12 +27,12 @@ async function logImmediateFailure(itemId, downHistoryId) {
       },
     });
     logger.info(`Sucesso ao registrar alerta: ${itemId}`);
+    notifyNewAlert(); // Notifica todos os clientes conectados via WebSocket
   } catch (error) {
     logger.error(`Falha ao criar resgistro de alerta: ${itemId}`, error);
-    throw new Error(`Falha ao criar resgistro de alerta: ${error.message}`);
+    throw error;
   }
 }
-
 
 module.exports = {
   async logErrorToDatabase(itemIds) {
@@ -63,7 +64,7 @@ module.exports = {
       }
     } catch (error) {
       logger.error("Erro ao salvar alertas no banco:", error);
-      throw new Error(`Falha ao salvar na database: ${error.message}`);
+      throw error;
     }
   },
 };
