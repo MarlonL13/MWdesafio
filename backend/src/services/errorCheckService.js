@@ -1,6 +1,6 @@
 const logger = require("../custom/logger.js");
 const ZabbixAPI = require("../api/zabbix.js/index.js");
-const { logErrorToDatabase } = require("./alertService.js");
+const { logErrorToDatabase } = require("./logService.js");
 
 const zabbix = new ZabbixAPI(
   process.env.ZABBIX_LINK, // Zabbix URL

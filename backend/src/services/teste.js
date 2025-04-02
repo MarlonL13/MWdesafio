@@ -29,6 +29,6 @@ const { checkForErrors } = require("./errorCheckService.js");
 // Potência TX do Usuário POP Tirol 49823
 // Potência TX do Usuário POP Zona Norte 49824
 
-checkForErrors(["49798", "49801", "49799", "49800"])
+checkForErrors(["49806", "49809", "49807", "49808"])
   .then(() => console.log("Teste concluído."))
   .catch((error) => console.error("Erro no teste:", error.message));

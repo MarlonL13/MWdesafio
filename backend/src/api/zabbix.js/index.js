@@ -59,9 +59,9 @@ class ZabbixAPI {
       method: "item.get",
       params: {
         filter: {
-          itemid: itemId
+          itemid: itemId,
         },
-        output: ["name", "key_", "hostid"],
+        output: ["name", "key_", "hostid", "lastclock"],
         hostids: hostId,
         selectHosts: ["host"], // Isso inclui o nome do host na resposta
       },
@@ -74,13 +74,16 @@ class ZabbixAPI {
       if (response.data.error) {
         throw new Error(`${response.data.error.data}`);
       }
-      return response.data.result.map((item) => ({
-        nome: item.name,
-        key: item.key_,
-        hostId: item.hostid,
-        hostName: item.hosts?.[0]?.host || "Desconhecido", // Garante que não quebra caso `hosts` seja vazio ou undefined
-        date: new Date().toISOString(),
-      }));
+      return response.data.result.map((item) => {
+        return {
+          itemId: item.itemid,
+          nome: item.name,
+          key: item.key_,
+          hostId: item.hostid,
+          hostName: item.hosts?.[0]?.host || "Desconhecido",
+          date: new Date(item.lastclock * 1000).toISOString()
+        };
+      });
     } catch (error) {
       handleZabbixError(error);
     }
@@ -88,7 +91,7 @@ class ZabbixAPI {
 
   async getHistory(itemId) {
     const now = Math.floor(Date.now() / 1000); // Tempo atual em segundos
-    const timeFrom = now - 70; // Janela de busca (1 min e 10 seg atrás)
+    const timeFrom = now - 65; // Janela de busca (1 min e 5 seg atrás)
     const timeTill = now; // Até o momento atual
 
     const data = {

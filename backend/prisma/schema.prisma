@@ -20,6 +20,7 @@ model DownHistory {
 
 model immediatefailureNotification {
   id String @id @default(uuid())
+  itemId String @unique
   downHistoryId String 
   read Boolean @default(false)
   

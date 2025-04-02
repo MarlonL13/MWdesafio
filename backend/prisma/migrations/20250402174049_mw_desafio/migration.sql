@@ -13,11 +13,15 @@ CREATE TABLE "DownHistory" (
 -- CreateTable
 CREATE TABLE "immediatefailureNotification" (
     "id" TEXT NOT NULL,
+    "itemId" TEXT NOT NULL,
     "downHistoryId" TEXT NOT NULL,
     "read" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "immediatefailureNotification_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "immediatefailureNotification_itemId_key" ON "immediatefailureNotification"("itemId");
 
 -- AddForeignKey
 ALTER TABLE "immediatefailureNotification" ADD CONSTRAINT "immediatefailureNotification_downHistoryId_fkey" FOREIGN KEY ("downHistoryId") REFERENCES "DownHistory"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
