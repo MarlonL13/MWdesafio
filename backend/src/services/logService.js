@@ -18,7 +18,7 @@ async function logImmediateFailure(itemId, downHistoryId) {
   try {
     await prisma.immediatefailureNotification.upsert({
       where: { itemId },
-      update: { read: false },
+      update: { read: false, downHistoryId: downHistoryId },
       create: {
         id: crypto.randomUUID(),
         itemId: itemId,

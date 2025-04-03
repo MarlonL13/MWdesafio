@@ -1,8 +1,9 @@
 const express = require("express");
 const cors = require("cors");
+const helmet = require("helmet");
 const http = require("http");
 require("dotenv").config();
-require("./jobs/cron.js"); 
+require("./jobs/cron.js");
 const { setupWebSocket } = require("./websocket/webSocket.js");
 
 const routes = require("./routes");
@@ -11,21 +12,10 @@ const server = http.createServer(app);
 
 setupWebSocket(server);
 
-
 app.use(express.json());
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Methods",
-    "GET,HEAD,OPTIONS,POST,PUT,DELETE"
-  );
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
-  app.use(cors());
-  next();
-});
+app.use(cors());
+app.use(helmet());
+
 app.use(routes);
 
 server.listen(3335, () => {

@@ -1,4 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
+const { handleControllerError } = require("../../utils/errorHandler");
 const logger = require("../../custom/logger");
 
 const prisma = new PrismaClient();
@@ -15,16 +16,14 @@ module.exports = {
         },
       });
 
-      if (!response.length) {
-        logger.warn("Nenhum registro encontrado para os últimos 30 dias.");
-        return res.status(404).json({ message: "Nenhum registro encontrado." });
-      }
-
-      logger.info("request test successfully");
+      logger.info(
+        response.length
+          ? `Foram encontrados ${response.length} erros no histórico.`
+          : "Nenhum erro encontrado."
+      );
       return res.status(200).json(response);
     } catch (error) {
-      logger.error("Erro ao buscar registros de downHistory:", error);
-      return res.status(500).json({ error: "Erro Interno do Servidor" });
+      handleControllerError(error, res);
     }
   },
 };

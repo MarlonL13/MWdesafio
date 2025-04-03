@@ -25,5 +25,5 @@ const validItemIds = [
 ];
 
 cron.schedule("*/1 * * * *", async () => {
-  checkForErrors(validItemIds);
+  // checkForErrors(validItemIds);
 });
