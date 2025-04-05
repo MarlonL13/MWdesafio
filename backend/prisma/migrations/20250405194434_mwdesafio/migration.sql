@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE "DownHistory" (
+CREATE TABLE "downHistory" (
     "id" TEXT NOT NULL,
     "nome" TEXT NOT NULL,
     "key" TEXT NOT NULL,
@@ -7,7 +7,7 @@ CREATE TABLE "DownHistory" (
     "hostName" TEXT NOT NULL,
     "date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-    CONSTRAINT "DownHistory_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "downHistory_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -24,4 +24,4 @@ CREATE TABLE "immediatefailureNotification" (
 CREATE UNIQUE INDEX "immediatefailureNotification_itemId_key" ON "immediatefailureNotification"("itemId");
 
 -- AddForeignKey
-ALTER TABLE "immediatefailureNotification" ADD CONSTRAINT "immediatefailureNotification_downHistoryId_fkey" FOREIGN KEY ("downHistoryId") REFERENCES "DownHistory"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "immediatefailureNotification" ADD CONSTRAINT "immediatefailureNotification_downHistoryId_fkey" FOREIGN KEY ("downHistoryId") REFERENCES "downHistory"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

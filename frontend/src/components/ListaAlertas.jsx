@@ -14,7 +14,7 @@ const ListaAlertas = ({ data }) => {
         marginTop: 5,
         padding: 2,
         textAlign: "start",
-        height: 500,
+        height: 465,
       }}
     >
       <CardContent

@@ -1,4 +1,5 @@
 import React, { useContext, useMemo } from "react";
+import { Grid, Box } from "@mui/material";
 import { DataContext } from "../context/DataContext";
 import TotalFalhasCard from "./TotalFalhasCard";
 import TipoFalhasChart from "./TipoFalhasChart";
@@ -8,8 +9,6 @@ import { LineChartData } from "../utils/dataProcessing";
 
 const DashboardLayout = () => {
   const { historyData, alertData, loading } = useContext(DataContext);
-  console.log(historyData);
-  console.log(alertData);
 
   const pingData = useMemo(
     () => LineChartData(historyData, "ping"),
@@ -32,37 +31,28 @@ const DashboardLayout = () => {
     [historyData]
   );
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  if (loading) return <div>Loading...</div>;
+
   return (
-    <div style={{ padding: "20px" }}>
-  {/* Grid superior */}
-  <div
-    style={{
-      display: "grid",
-      gridTemplateColumns: "1fr 2fr", // 1/3 + 2/3
-      gap: "20px",
-    }}
-  >
-    {/* Coluna da esquerda com dois cards empilhados */}
-    <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-      <TotalFalhasCard data={historyData} />
-      <TipoFalhasChart data={historyData} />
-    </div>
+    <Box px={5} mt={0}>
+      {/* Grid Superior */}
+      <Grid container spacing={2}>
+        {/* Coluna esquerda com dois cards */}
+        <Grid size={{ sm: 12, md: 4 }}>
+          <Box display="flex" flexDirection="column">
+            <TotalFalhasCard data={historyData} />
+            <TipoFalhasChart data={historyData} />
+          </Box>
+        </Grid>
 
-    {/* Lista de alertas ocupando 2/3 da largura */}
-    <ListaAlertas data={alertData} />
-  </div>
+        {/* Coluna direita com lista de alertas */}
+        <Grid size={{ sm: 12 , md: 8 }}>
+          <ListaAlertas data={alertData} />
+        </Grid>
+      </Grid>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(2, 1fr)",
-          gap: "20px",
-          marginTop: "20px",
-        }}
-      >
+      {/* Gráficos */}
+      <Grid container spacing={2} mt={5}>
         {[
           { data: pingData, title: "Falhas de Ping" },
           { data: traficInData, title: "Falhas de Tráfego de Entrada" },
@@ -70,19 +60,19 @@ const DashboardLayout = () => {
           { data: powerRxData, title: "Falhas de Potência RX" },
           { data: powerTxData, title: "Falhas de Potência TX" },
         ].map((grafico, index, array) => (
-          <div
+          <Grid
+            size={{
+              xs: 12,
+              sm: 6,
+              md: array.length % 2 === 1 && index === array.length - 1 ? 12 : 6,
+            }}
             key={grafico.title}
-            style={
-              array.length % 2 === 1 && index === array.length - 1
-                ? { gridColumn: "span 2" }
-                : {}
-            }
           >
             <GraficoLinha data={grafico.data} title={grafico.title} />
-          </div>
+          </Grid>
         ))}
-      </div>
-    </div>
+      </Grid>
+    </Box>
   );
 };
 
