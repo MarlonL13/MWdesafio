@@ -11,6 +11,19 @@ module.exports = {
         where: {
           read: false,
         },
+        include: {
+          downHistory: {
+            select: {
+              date: true,
+              nome: true,
+            },
+          },
+        },
+        orderBy: {
+          downHistory: {
+            date: "desc",
+          },
+        },
       });
 
       logger.info(
@@ -33,9 +46,10 @@ module.exports = {
     }
 
     try {
-      const existingAlert = await prisma.immediatefailureNotification.findUnique({
-        where: { id },
-      });
+      const existingAlert =
+        await prisma.immediatefailureNotification.findUnique({
+          where: { id },
+        });
 
       if (!existingAlert) {
         return res.status(404).json({ error: "Alerta não encontrado" });
@@ -51,5 +65,5 @@ module.exports = {
     } catch (error) {
       handleControllerError(error, res);
     }
-}
+  },
 };

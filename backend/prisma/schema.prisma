@@ -7,7 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model DownHistory {
+model downHistory {
   id String @id @default(uuid())
   nome String 
   key String 
@@ -24,5 +24,5 @@ model immediatefailureNotification {
   downHistoryId String 
   read Boolean @default(false)
   
-  downHistory DownHistory @relation(fields: [downHistoryId], references: [id])
+  downHistory downHistory @relation(fields: [downHistoryId], references: [id])
 }

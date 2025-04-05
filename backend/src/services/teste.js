@@ -1,5 +1,3 @@
-const { checkForErrors } = require("./errorCheckService.js");
-
 // Latência do Usuário POP Ponta Negra 49798
 // Latência do Usuário POP Praia do Meio 49801
 // Latência do Usuário POP Tirol 49799
@@ -29,6 +27,60 @@ const { checkForErrors } = require("./errorCheckService.js");
 // Potência TX do Usuário POP Tirol 49823
 // Potência TX do Usuário POP Zona Norte 49824
 
-checkForErrors(["49806", "49809", "49807", "49808"])
-  .then(() => console.log("Teste concluído."))
-  .catch((error) => console.error("Erro no teste:", error.message));
+const { checkForErrors } = require("./errorCheckService.js");
+const webSocketManager = require("../websocket/webSocket.js");
+const http = require("http");
+const express = require("express");
+const logger = require("../custom/logger.js");
+const WebSocket = require("ws");
+
+// Create a simple server for testing
+const app = express();
+const server = http.createServer(app);
+
+// Initialize WebSocket server
+webSocketManager.setupWebSocket(server);
+
+console.log("Starting test server...");
+
+// Start the server on a different port for testing
+server.listen(3336, () => {
+  console.log("Test server running on port 3336");
+  
+  // Create a test client to connect to our WebSocket server
+  const client = new WebSocket('ws://localhost:3336');
+  
+  client.on('open', () => {
+    console.log("Test client connected to WebSocket server");
+    
+    client.on('message', (data) => {
+      const message = JSON.parse(data.toString());
+      console.log("Received message:", message);
+    });
+    
+    // Wait a moment for everything to initialize
+    setTimeout(() => {
+      console.log("Running error check test...");
+      
+      // Now run the test
+      checkForErrors(["49806", "49809", "49807", "49808"])
+        .then(() => {
+          console.log("Teste concluído.");
+          // Wait to see if we get any WebSocket messages
+          setTimeout(() => {
+            client.close();
+            process.exit(0);
+          }, 2000);
+        })
+        .catch((error) => {
+          console.error("Erro no teste:", error.message);
+          client.close();
+          process.exit(1);
+        });
+    }, 1000);
+  });
+  
+  client.on('error', (error) => {
+    console.error("Test client connection error:", error.message);
+  });
+});
