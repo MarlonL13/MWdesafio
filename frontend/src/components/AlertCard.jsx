@@ -1,17 +1,32 @@
-import React from "react";
+import React, { useContext } from "react";
+import { DataContext } from "../context/DataContext";
 import { Box, Typography, Button } from "@mui/material";
 
-const AlertCard = ({ date, nome, read }) => {
+const AlertCard = ({ date, nome, read, id }) => {
+  const { updateAlerta } = useContext(DataContext);
+
+  const handleMarkAsRead = async (id) => {
+    try {
+      await updateAlerta(id);
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
   return (
     <Box>
       <Box
         sx={{
           backgroundColor: "background.secondary",
-          borderLeft: "6px solid",
+          borderLeft: "8px solid",
           borderColor: read ? "transparent" : "color.highlight",
           padding: 1.5,
           marginY: 1.5,
           borderRadius: 0.5,
+          transition: "all 0.3s ease-in-out", // Added transition for all properties
+          "&:hover": {
+            transform: read ? "none" : "translateX(5px)", // Optional hover effect
+          }
         }}
       >
         <Box
@@ -40,7 +55,7 @@ const AlertCard = ({ date, nome, read }) => {
 
           {!read && (
             <Button
-              onClick={() => {}}
+              onClick={() => handleMarkAsRead(id)}
               sx={{
                 backgroundColor: "color.primary",
                 color: "text.primary",

@@ -41,23 +41,22 @@ const TotalFalhasCard = ({ data }) => {
           value={periodo}
           onChange={(e) => setPeriodo(e.target.value)}
           fullWidth
+          labelId="period-filter-label"
+          inputProps={{
+            "aria-label": "Filtrar por período",
+            name: "period-filter",
+          }}
           sx={{
-            mt: 2,
+            marginTop: 2,
             backgroundColor: "background.secondary",
             color: "text.primary",
             borderRadius: 1,
-
-            // Mudar a cor da borda e do Select
             "& .MuiOutlinedInput-notchedOutline": {
-              borderColor: "transparent", // remover a borda padrão
+              borderColor: "transparent",
             },
             "&:hover .MuiOutlinedInput-notchedOutline": {
-              borderColor: "primary.main", // borda no hover
+              borderColor: "primary.main",
             },
-            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-              borderColor: "primary.main", // borda no foco
-            },
-            // Muda cor do icon do Select
             "& .MuiSelect-icon": {
               color: "primary.main",
             },

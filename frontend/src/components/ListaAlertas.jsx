@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import AlertCard from "./AlertCard";
 
 const ListaAlertas = ({ data }) => {
+  
   return (
     <Card
       elevation={0}
@@ -57,6 +58,7 @@ const ListaAlertas = ({ data }) => {
           {data.map((item, index) => (
             <AlertCard
               key={index}
+              id={item.id}
               date={dayjs(item.downHistory.date).format("DD/MM/YYYY HH:mm")}
               nome={item.downHistory.nome}
               read={item.read}

@@ -8,9 +8,6 @@ module.exports = {
   async getAlert(req, res) {
     try {
       const response = await prisma.immediatefailureNotification.findMany({
-        where: {
-          read: false,
-        },
         include: {
           downHistory: {
             select: {

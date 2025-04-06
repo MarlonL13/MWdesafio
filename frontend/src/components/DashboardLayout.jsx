@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from "react";
-import { Grid, Box } from "@mui/material";
+import { Grid, Box, Typography, CircularProgress } from "@mui/material";
 import { DataContext } from "../context/DataContext";
 import TotalFalhasCard from "./TotalFalhasCard";
 import TipoFalhasChart from "./TipoFalhasChart";
@@ -31,7 +31,28 @@ const DashboardLayout = () => {
     [historyData]
   );
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) {
+    return (
+      <Box
+        role="alert"
+        aria-live="polite"
+        aria-busy="true"
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          minHeight: "300px",
+          gap: 2,
+        }}
+      >
+        <CircularProgress aria-label="Loading dashboard data" />
+        <Typography variant="body1" component="p">
+          Carregando o Dashboard...
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
     <Box px={5} mt={0}>
@@ -46,7 +67,7 @@ const DashboardLayout = () => {
         </Grid>
 
         {/* Coluna direita com lista de alertas */}
-        <Grid size={{ sm: 12 , md: 8 }}>
+        <Grid size={{ sm: 12, md: 8 }}>
           <ListaAlertas data={alertData} />
         </Grid>
       </Grid>
@@ -62,9 +83,8 @@ const DashboardLayout = () => {
         ].map((grafico, index, array) => (
           <Grid
             size={{
-              xs: 12,
-              sm: 6,
-              md: array.length % 2 === 1 && index === array.length - 1 ? 12 : 6,
+              md: 12,
+              lg: array.length % 2 === 1 && index === array.length - 1 ? 12 : 6,
             }}
             key={grafico.title}
           >

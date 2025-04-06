@@ -23,7 +23,7 @@ const theme = createTheme({
       primary: "#576da5", // destaque 1
       secondary: "#74c172", // destaque 2
       selected:"rgb(128, 160, 240)",
-      highlight: "#02b2af"
+      highlight: "#00F2FF"
     }
   },
   shape: {
