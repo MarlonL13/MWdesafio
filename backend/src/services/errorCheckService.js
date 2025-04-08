@@ -1,6 +1,7 @@
 const logger = require("../custom/logger.js");
 const ZabbixAPI = require("../api/zabbix.js/index.js");
 const { logErrorToDatabase } = require("./logService.js");
+const { log } = require("winston");
 
 const zabbix = new ZabbixAPI(
   process.env.ZABBIX_LINK, // Zabbix URL
@@ -11,7 +12,7 @@ const zabbix = new ZabbixAPI(
 module.exports = {
   // Método para verificar se há erros no historico de itens
   async checkForErrors(itemIds) {
-    console.log("Verificando erros nos itens:", itemIds);
+    logger.info("Verificando se existe erros nos itens");
     try {
       // Realiza login
       await zabbix.login();
@@ -27,7 +28,6 @@ module.exports = {
         logger.warn(`Erros encontrados nos itens: ${errorItems.join(", ")}`);
         await logErrorToDatabase(errorItems);
       }
-      console.log(items);
 
       // Realiza Logout
       await zabbix.logout();

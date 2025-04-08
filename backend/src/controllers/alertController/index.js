@@ -9,26 +9,23 @@ module.exports = {
   async getAlert(req, res) {
     try {
       const response = await prisma.immediatefailureNotification.findMany({
+        take: 20, // Limite de quantos alertas retornar
         include: {
           downHistory: {
-            select: {
-              date: true,
-              nome: true,
-            },
+        select: {
+          date: true,
+          nome: true,
+        },
           },
         },
         orderBy: {
           downHistory: {
-            date: "desc",
+        date: "desc",
           },
         },
       });
 
-      logger.info(
-        response.length
-          ? `Foram encontrados ${response.length} alertas não lidos.`
-          : "Nenhum alerta encontrado."
-      );
+      logger.info(`Recuperados alertas recentes com sucesso`);
       return res.status(200).json(response);
     } catch (error) {
       handleControllerError(error, res);

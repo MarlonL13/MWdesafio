@@ -1,5 +1,6 @@
 const axios = require("axios");
 const { handleZabbixError } = require("../../utils/errorHandler.js");
+const logger = require("../../custom/logger.js");
 
 class ZabbixAPI {
   constructor(url, username, password) {
@@ -50,7 +51,7 @@ class ZabbixAPI {
     }
   }
   // Método para obter os detalhes de um item específico
-  async getItems( itemId) {
+  async getItems(itemId) {
     const data = {
       jsonrpc: "2.0",
       method: "item.get",
@@ -58,7 +59,7 @@ class ZabbixAPI {
         filter: {
           itemid: itemId,
         },
-        output: ["name", "key_", "hostid", "lastclock"],
+        output: "extend",
         selectHosts: ["host"], // Isso inclui o nome do host na resposta
       },
       id: 1,
@@ -99,7 +100,6 @@ class ZabbixAPI {
         itemids: itemId,
         sortfield: "clock",
         sortorder: "DESC",
-        limit: 10,
         time_from: timeFrom,
         time_till: timeTill,
       },
@@ -111,11 +111,11 @@ class ZabbixAPI {
       if (response.data.error) {
         throw new Error(`${response.data.error.data}`);
       }
+      if (response.data.result.length === 0) {
+        logger.warn(`Api Zabbix retornou valors nulos ou indefinidos para o item: ${itemId}`); 
+      }
       return response.data.result;
     } catch (error) {
-      if (error.message.includes("Not authorised")) {
-        throw error;
-      }
       handleZabbixError(error);
     }
   }

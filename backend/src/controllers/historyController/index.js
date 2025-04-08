@@ -17,11 +17,7 @@ module.exports = {
         },
       });
 
-      logger.info(
-        response.length
-          ? `Foram encontrados ${response.length} erros no histórico.`
-          : "Nenhum erro encontrado."
-      );
+      logger.info("Histórico de erros dos últimos 30 dias recuperado com sucesso");
       return res.status(200).json(response);
     } catch (error) {
       handleControllerError(error, res);

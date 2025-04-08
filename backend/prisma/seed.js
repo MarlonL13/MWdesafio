@@ -80,30 +80,12 @@ async function main() {
   // Sort by date (newest first)
   downHistoryRecords.sort((a, b) => b.rawDate - a.rawDate);
   
-  // Create notifications only for most recent records (one per itemId)
-  const notificationsToCreate = [];
-  const usedItemIds = new Set();
-  
-  for (const record of downHistoryRecords) {
-    // Only create notification if we have unused itemIds left
-    if (usedItemIds.size < itemIds.length) {
-      let itemId;
-      
-      // Find an unused itemId
-      do {
-        itemId = itemIds[Math.floor(Math.random() * itemIds.length)];
-      } while (usedItemIds.has(itemId));
-      
-      usedItemIds.add(itemId);
-      
-      notificationsToCreate.push({
-        id: uuidv4(),
-        itemId: itemId,
-        downHistoryId: record.id,
-        read: Math.random() > 0.7 // 30% chance of being read
-      });
-    }
-  }
+  // Create notifications only for most recent records
+  const notificationsToCreate = downHistoryRecords.map(record => ({
+    id: uuidv4(),
+    downHistoryId: record.id,
+    read: Math.random() > 0.7 // 30% chance of being read
+  }));
   
   // Create all records in transaction
   try {

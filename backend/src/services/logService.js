@@ -14,22 +14,19 @@ const zabbix = new ZabbixAPI(
 const hostId = process.env.ZABBIX_ID_HOST;
 
 // Função para loggar alertas no banco de dados e notificar via WebSocket
-async function logImmediateFailure(itemId, downHistoryId) {
+async function logImmediateFailure(downHistoryId) {
   try {
-    await prisma.immediatefailureNotification.upsert({
-      where: { itemId },
-      update: { read: false, downHistoryId: downHistoryId },
-      create: {
+    await prisma.immediatefailureNotification.create({
+      data: {
         id: crypto.randomUUID(),
-        itemId: itemId,
         downHistoryId: downHistoryId,
         read: false,
       },
     });
-    logger.info(`Sucesso ao registrar alerta: ${itemId}`);
+    logger.info("Sucesso ao registrar um novo alerta");
     webSocketManager.notifyNewAlert(); // Notifica todos os clientes conectados via WebSocket
   } catch (error) {
-    logger.error(`Falha ao criar resgistro de alerta: ${itemId}`, error);
+    logger.error(`Falha ao criar um novo alerta: ${error}`);
     throw error;
   }
 }
@@ -61,7 +58,7 @@ module.exports = {
         });
         logger.info(`Registro salvo com sucesso para item: ${item.nome}`);
         // Cria o resgitro no banco de dados immediatefailureNotification
-        await logImmediateFailure(item.itemId, errorLog.id);
+        await logImmediateFailure(errorLog.id);
       }
     } catch (error) {
       logger.error("Erro ao salvar alertas no banco:", error);
