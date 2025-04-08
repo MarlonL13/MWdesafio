@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { DataContext } from "../context/DataContext";
 import { Box, Typography, Button } from "@mui/material";
 
@@ -23,9 +23,9 @@ const AlertCard = ({ date, nome, read, id }) => {
           padding: 1.5,
           marginY: 1.5,
           borderRadius: 0.5,
-          transition: "all 0.3s ease-in-out", // Added transition for all properties
+          transition: "all 0.3s ease-in-out", 
           "&:hover": {
-            transform: read ? "none" : "translateX(5px)", // Optional hover effect
+            transform: read ? "none" : "translateX(5px)",
           }
         }}
       >

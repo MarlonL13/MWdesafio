@@ -23,7 +23,7 @@ const validItemIds = [
   "49823",
   "49824", // Potência TX
 ];
-
+// Executa a verificação de erros a cada minuto
 cron.schedule("*/1 * * * *", async () => {
   // checkForErrors(validItemIds);
 });

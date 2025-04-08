@@ -49,8 +49,8 @@ class ZabbixAPI {
       handleZabbixError(error);
     }
   }
-
-  async getItems(hostId, itemId) {
+  // Método para obter os detalhes de um item específico
+  async getItems( itemId) {
     const data = {
       jsonrpc: "2.0",
       method: "item.get",
@@ -59,7 +59,6 @@ class ZabbixAPI {
           itemid: itemId,
         },
         output: ["name", "key_", "hostid", "lastclock"],
-        hostids: hostId,
         selectHosts: ["host"], // Isso inclui o nome do host na resposta
       },
       id: 1,
@@ -85,7 +84,7 @@ class ZabbixAPI {
       handleZabbixError(error);
     }
   }
-
+  // Método para obter o histórico de um item específico
   async getHistory(itemId) {
     const now = Math.floor(Date.now() / 1000); // Tempo atual em segundos
     const timeFrom = now - 65; // Janela de busca (1 min e 5 seg atrás)

@@ -1,12 +1,13 @@
 const logger = require("../custom/logger.js");
 const { WebSocketServer } = require("ws");
 
+// Classe responsável por gerenciar o WebSocket
 class WebSocketManager {
   constructor() {
     this.wss = null;
     logger.info("WebSocketManager initialized");
   }
-
+// Método para inicializar o servidor WebSocket
   setupWebSocket(server) {
 
     this.wss = new WebSocketServer({ server });
@@ -24,7 +25,7 @@ class WebSocketManager {
     });
   }
 
-  // Apenas notifica o frontend que há novos alertas
+  // Metodo para notificar os clientes conectados sobre novos alertas
   notifyNewAlert() {
     if (!this.wss) {
       logger.warn("Attempted to notify clients but WebSocket server is not initialized");

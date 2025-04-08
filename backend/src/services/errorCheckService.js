@@ -9,18 +9,15 @@ const zabbix = new ZabbixAPI(
 );
 
 module.exports = {
+  // Método para verificar se há erros no historico de itens
   async checkForErrors(itemIds) {
+    console.log("Verificando erros nos itens:", itemIds);
     try {
       // Realiza login
       await zabbix.login();
       // Faz uso de um map + Promise.all para fazer as requisições em paralelo
-      //   const promises = itemIds.map((itemId) => zabbix.getHistory(itemId));
-      //   const items = await Promise.all(promises);
-      const mockHistory = itemIds.map((itemId) => [
-        { itemid: itemId, value: 0, clock: "1743530536", ns: "644865341" }, // Erro
-        { itemid: itemId, value: null, clock: "1743530536", ns: "644865341" }, // Erro
-      ]);
-      const items = await Promise.all(mockHistory);
+        const promises = itemIds.map((itemId) => zabbix.getHistory(itemId));
+        const items = await Promise.all(promises);
       const errorItems = items
         .flat()
         .filter((item) => item.value === 0 || item.value === null)
@@ -30,6 +27,7 @@ module.exports = {
         logger.warn(`Erros encontrados nos itens: ${errorItems.join(", ")}`);
         await logErrorToDatabase(errorItems);
       }
+      console.log(items);
 
       // Realiza Logout
       await zabbix.logout();

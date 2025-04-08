@@ -1,4 +1,3 @@
-import React from "react";
 import { Card, CardContent, Typography, Box } from "@mui/material";
 import dayjs from "dayjs";
 import AlertCard from "./AlertCard";

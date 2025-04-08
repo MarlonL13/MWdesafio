@@ -1,11 +1,13 @@
 import { createContext, useEffect, useState } from "react";
 import axios from "axios";
+import AlertNotification from "../components/AlertNotification";
 
 export const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
   const [historyData, setHistoryData] = useState(null);
   const [alertData, setAlertData] = useState(null);
+  const [showAlert, setShowAlert] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -29,11 +31,9 @@ export const DataProvider = ({ children }) => {
     // WebSocket connection
     const socket = new WebSocket("ws://localhost:3335");
 
-    socket.onopen = () => {
-    };
+    socket.onopen = () => {};
 
-    socket.onclose = () => {
-    };
+    socket.onclose = () => {};
 
     socket.onmessage = async (event) => {
       try {
@@ -44,6 +44,7 @@ export const DataProvider = ({ children }) => {
               "http://localhost:3335/alert"
             );
             setAlertData(alertResponse.data);
+            setShowAlert(true);
           } catch (error) {
             console.error("[ERRO DE ATUALIZAÇÃO DE ALERTA]", error.message);
           }
@@ -69,7 +70,7 @@ export const DataProvider = ({ children }) => {
     try {
       await axios.patch(`http://localhost:3335/alert/${id}`);
       const alertResponse = await axios.get("http://localhost:3335/alert");
-      setAlertData(alertResponse.data)
+      setAlertData(alertResponse.data);
     } catch (error) {
       console.error(`Erro ao marcar como lido:`, {
         message: error.message,
@@ -81,11 +82,14 @@ export const DataProvider = ({ children }) => {
     }
   };
 
+  const handleCloseAlert = () => setShowAlert(false);
+
   return (
     <DataContext.Provider
       value={{ historyData, alertData, loading, updateAlerta }}
     >
       {children}
+      <AlertNotification open={showAlert} onClose={handleCloseAlert} />
     </DataContext.Provider>
   );
 };

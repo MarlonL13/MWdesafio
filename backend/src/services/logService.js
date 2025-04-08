@@ -13,7 +13,7 @@ const zabbix = new ZabbixAPI(
 
 const hostId = process.env.ZABBIX_ID_HOST;
 
-// Função para loggar alertas no banco de dados
+// Função para loggar alertas no banco de dados e notificar via WebSocket
 async function logImmediateFailure(itemId, downHistoryId) {
   try {
     await prisma.immediatefailureNotification.upsert({
@@ -35,10 +35,11 @@ async function logImmediateFailure(itemId, downHistoryId) {
 }
 
 module.exports = {
+  // Funçao para salvar os erros no banco de dados e chamar a função de logImmediateFailure
   async logErrorToDatabase(itemIds) {
     try {
       await zabbix.login();
-      const promises = itemIds.map((itemId) => zabbix.getItems(hostId, itemId));
+      const promises = itemIds.map((itemId) => zabbix.getItems(itemId));
       const items = await Promise.all(promises);
       for (const itemArray of items) {
         const item = itemArray[0];

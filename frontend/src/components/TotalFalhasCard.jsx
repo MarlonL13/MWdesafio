@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Card, CardContent, Typography, Select, MenuItem } from "@mui/material";
 
 const TotalFalhasCard = ({ data }) => {

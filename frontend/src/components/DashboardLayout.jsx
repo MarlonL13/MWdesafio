@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from "react";
+import { useContext, useMemo } from "react";
 import { Grid, Box, Typography, CircularProgress } from "@mui/material";
 import { DataContext } from "../context/DataContext";
 import TotalFalhasCard from "./TotalFalhasCard";

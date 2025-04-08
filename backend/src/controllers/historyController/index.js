@@ -5,6 +5,7 @@ const logger = require("../../custom/logger");
 const prisma = new PrismaClient();
 
 module.exports = {
+  // Método para receber o historico de erros registrados no banco de dados nos ultimos 30 dias
   async getHistory(req, res) {
     const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
     try {

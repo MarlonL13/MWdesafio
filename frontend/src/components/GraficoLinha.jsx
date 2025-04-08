@@ -19,7 +19,7 @@ const GraficoLinha = ({ data, title }) => {
   const [selectedSeries, setSelectedSeries] = useState("all");
 
   const id = useId();
-
+  // Detectar o tipo de mídia para ajustar o gráfico
   const theme = useTheme();
   const isMd = useMediaQuery(theme.breakpoints.down("md"));
 

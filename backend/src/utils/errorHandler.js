@@ -1,6 +1,7 @@
 const logger = require("../custom/logger.js");
 const { Prisma } = require("@prisma/client");
 
+// Função para lidar com erros do Zabbix e lançar exceções apropriadas
 function handleZabbixError(error) {
   if (error.message.includes("Incorrect user name or password")) {
     logger.error("Erro de autenticação no Zabbix:", error.message);
@@ -23,6 +24,7 @@ function handleZabbixError(error) {
   );
 }
 
+// Função para lidar com erros do controlador e retornar respostas apropriadas
 function handleControllerError(error, res) {
   if (error instanceof Prisma.PrismaClientKnownRequestError) {
     // Erros específicos do Prisma (ex: violação de unicidade, chave estrangeira inválida)

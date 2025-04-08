@@ -5,6 +5,7 @@ const logger = require("../../custom/logger");
 const prisma = new PrismaClient();
 
 module.exports = {
+  // Método para receber os ultimos alertas registrados no banco de dados
   async getAlert(req, res) {
     try {
       const response = await prisma.immediatefailureNotification.findMany({
@@ -34,6 +35,7 @@ module.exports = {
     }
   },
 
+  // Método para marcar o alerta como lido
   async markAlertAsRead(req, res) {
     const { id } = req.params;
 
